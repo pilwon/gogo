@@ -1,5 +1,8 @@
 # gogo
 
+
+## Usage
+
 ```go
 package main
 
@@ -34,5 +37,9 @@ func main() {
 }
 ```
 
-https://github.com/codegangsta/negroni
-https://github.com/strongloop/express
+
+## Credits
+
+* https://github.com/codegangsta/negroni
+* https://github.com/strongloop/express
+* https://github.com/guregu/kami
