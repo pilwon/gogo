@@ -1,13 +1,13 @@
 package httprouter
 
 import (
-	"fmt"
+	"errors"
 	"net/http"
 
 	"github.com/julienschmidt/httprouter"
 	"github.com/pilwon/gogo"
-	"github.com/pilwon/gogo/middleware"
 	"github.com/pilwon/gogo/gogocontext"
+	"github.com/pilwon/gogo/middleware"
 	"golang.org/x/net/context"
 )
 
@@ -26,25 +26,14 @@ func New() *Router {
 }
 
 func (r *Router) AddRoute(c context.Context, httpVerb string, path string, h middleware.Handler) error {
-	switch httpVerb {
-	case "GET":
-		r.router.GET(path, wrapHandler(c, h))
-	case "HEAD":
-		r.router.HEAD(path, wrapHandler(c, h))
-	case "OPTIONS":
-		r.router.OPTIONS(path, wrapHandler(c, h))
-	case "POST":
-		r.router.POST(path, wrapHandler(c, h))
-	case "PUT":
-		r.router.PUT(path, wrapHandler(c, h))
-	case "PATCH":
-		r.router.PATCH(path, wrapHandler(c, h))
-	case "DELETE":
-		r.router.DELETE(path, wrapHandler(c, h))
-	default:
-		panic(fmt.Sprintf("Unsupported HTTP verb: (%s, %s)", httpVerb, path))
-	}
-	return nil
+	var err error
+	defer func() {
+		if r := recover(); r != nil {
+			err = errors.New("Failed to add route")
+		}
+	}()
+	r.router.Handle(httpVerb, path, wrapHandler(c, h))
+	return err
 }
 
 func (r *Router) Handler() http.Handler {

@@ -7,6 +7,7 @@ import (
 	"os"
 
 	"github.com/pilwon/gogo/middleware"
+	"github.com/pilwon/gogo/router"
 	"golang.org/x/net/context"
 )
 
@@ -15,96 +16,95 @@ type middlewareNode struct {
 	next    *middlewareNode
 }
 
-func (m middlewareNode) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	m.ServeHTTPWithContext(Context, w, r)
-}
-
-func (m middlewareNode) ServeHTTPWithContext(c context.Context, w http.ResponseWriter, r *http.Request) context.Context {
+func (m middlewareNode) ServeHTTP(c context.Context, w http.ResponseWriter, r *http.Request) context.Context {
 	nextCalled := false
 	ctx := nextMiddlewareWithContext(c, func(c context.Context) context.Context {
 		if !nextCalled && m.next != nil {
-			return m.next.ServeHTTPWithContext(c, w, r)
+			return m.next.ServeHTTP(c, w, r)
 		}
 		return c
 	})
 	ctx = m.handler.ServeHTTP(ctx, w, r)
 	if !nextCalled && ctx != nil && m.next != nil {
-		return m.next.ServeHTTPWithContext(c, w, r)
+		return m.next.ServeHTTP(c, w, r)
 	}
 	return ctx
 }
 
-type server struct {
+type Server struct {
+	Context context.Context
+
 	handlers []middleware.Handler
 	root     middlewareNode
 }
 
-func newServer(config Config) *server {
+func newServer(c context.Context, config Config) *Server {
 	if registeredRouter == nil {
 		fmt.Fprintf(os.Stderr, "error: Missing \"Router\". Register a router.\n")
 		os.Exit(1)
 	}
-	return &server{
+	return &Server{
+		Context:  c,
 		handlers: []middleware.Handler{},
 		root:     voidMiddlewareNode(),
 	}
 }
 
-func (g *server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	g.root.ServeHTTP(NewResponseWriter(w), r)
+func (s *Server) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	s.root.ServeHTTP(s.Context, NewResponseWriter(w), r)
 }
 
-func (g *server) Use(h middleware.Handler) {
-	g.handlers = append(g.handlers, h)
-	g.root = build(g.handlers)
+func (s *Server) Use(h middleware.Handler) {
+	s.handlers = append(s.handlers, h)
+	s.root = build(s.handlers)
 }
 
-func (g *server) UseFunc(h middleware.HandlerFunc) {
-	g.Use(middleware.HandlerFunc(h))
+func (s *Server) UseFunc(h middleware.HandlerFunc) {
+	s.Use(middleware.HandlerFunc(h))
 }
 
-func (g *server) UseHandler(h http.Handler) {
-	g.Use(middleware.WrapHandler(h))
+func (s *Server) UseHandler(h http.Handler) {
+	s.Use(middleware.WrapHandler(h))
 }
 
-func (g *server) UseHandlerFunc(h http.HandlerFunc) {
-	g.UseHandler(http.HandlerFunc(h))
+func (s *Server) UseHandlerFunc(h http.HandlerFunc) {
+	s.UseHandler(http.HandlerFunc(h))
 }
 
-func (g *server) Get(path string, h middleware.HandlerFunc) {
-	registeredRouter.AddRoute(Context, "GET", path, h)
+func (s *Server) Get(path string, h router.HandlerFunc) {
+	registeredRouter.AddRoute(s.Context, "GET", path, router.MiddlewareFromRouterHandler(h))
 }
 
-func (g *server) Head(path string, h middleware.HandlerFunc) {
-	registeredRouter.AddRoute(Context, "HEAD", path, h)
+func (s *Server) Head(path string, h router.HandlerFunc) {
+	registeredRouter.AddRoute(s.Context, "HEAD", path, router.MiddlewareFromRouterHandler(h))
 }
 
-func (g *server) Options(path string, h middleware.HandlerFunc) {
-	registeredRouter.AddRoute(Context, "OPTIONS", path, h)
+func (s *Server) Options(path string, h router.HandlerFunc) {
+	registeredRouter.AddRoute(s.Context, "OPTIONS", path, router.MiddlewareFromRouterHandler(h))
 }
 
-func (g *server) Post(path string, h middleware.HandlerFunc) {
-	registeredRouter.AddRoute(Context, "POST", path, h)
+func (s *Server) Post(path string, h router.HandlerFunc) {
+	registeredRouter.AddRoute(s.Context, "POST", path, router.MiddlewareFromRouterHandler(h))
 }
 
-func (g *server) Put(path string, h middleware.HandlerFunc) {
-	registeredRouter.AddRoute(Context, "PUT", path, h)
+func (s *Server) Put(path string, h router.HandlerFunc) {
+	registeredRouter.AddRoute(s.Context, "PUT", path, router.MiddlewareFromRouterHandler(h))
 }
 
-func (g *server) Patch(path string, h middleware.HandlerFunc) {
-	registeredRouter.AddRoute(Context, "PATCH", path, h)
+func (s *Server) Patch(path string, h router.HandlerFunc) {
+	registeredRouter.AddRoute(s.Context, "PATCH", path, router.MiddlewareFromRouterHandler(h))
 }
 
-func (g *server) Delete(path string, h middleware.HandlerFunc) {
-	registeredRouter.AddRoute(Context, "DELETE", path, h)
+func (s *Server) Delete(path string, h router.HandlerFunc) {
+	registeredRouter.AddRoute(s.Context, "DELETE", path, router.MiddlewareFromRouterHandler(h))
 }
 
-func (g *server) Run(addr string) {
-	g.UseHandler(registeredRouter.Handler())
+func (s *Server) Run(addr string) {
+	s.UseHandler(registeredRouter.Handler())
 
 	l := log.New(os.Stdout, "[gogo] ", 0)
 	l.Printf("Listening on %s", addr)
-	l.Fatal(http.ListenAndServe(addr, g))
+	l.Fatal(http.ListenAndServe(addr, s))
 }
 
 func build(handlers []middleware.Handler) middlewareNode {

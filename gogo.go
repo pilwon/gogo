@@ -1,7 +1,9 @@
 package gogo
 
 import (
-	"log"
+	"errors"
+	"fmt"
+	"net/http"
 
 	"github.com/pilwon/gogo/gogocontext"
 	"github.com/pilwon/gogo/middleware"
@@ -12,16 +14,23 @@ import (
 type Config map[string]interface{}
 
 var (
-	Context          = context.Background()
 	registeredRouter router.Router
 )
 
-func New() *server {
-	return newServer(Config{})
+func New() *Server {
+	return newServer(context.Background(), Config{})
 }
 
-func NewWithConfig(config Config) *server {
-	return newServer(config)
+func NewWithConfig(config Config) *Server {
+	return newServer(context.Background(), config)
+}
+
+func NewWithContext(c context.Context) *Server {
+	return newServer(c, Config{})
+}
+
+func NewWithContextConfig(c context.Context, config Config) *Server {
+	return newServer(c, config)
 }
 
 func Next(c context.Context) context.Context {
@@ -35,15 +44,30 @@ func Params(c context.Context) gogocontext.Params {
 	return gogocontext.ParamsFromContext(c)
 }
 
-func Param(c context.Context, key string) string {
-	return gogocontext.ParamsFromContext(c)[key]
+func Param(c context.Context, key string) (string, error) {
+	val, ok := gogocontext.ParamsFromContext(c)[key]
+	if ok {
+		return val, nil
+	} else {
+		return val, errors.New(fmt.Sprintf("Invalid param: %s", key))
+	}
 }
 
 func RegisterRouter(r router.Router) {
 	if registeredRouter != nil {
-		log.Panicln("Router already registered.")
+		panic("Router already registered.")
 	}
 	registeredRouter = r
 }
 
-var Wrap = middleware.WrapHandler
+func MiddlewareFromHandler(h http.Handler) middleware.Handler {
+	return middleware.WrapHandler(h)
+}
+
+func MiddlewareFromRouteHandler(h router.Handler) middleware.Handler {
+	return router.MiddlewareFromRouterHandler(h)
+}
+
+func Wrap(h http.Handler) router.Handler {
+	return router.WrapHandler(h)
+}

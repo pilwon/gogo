@@ -16,15 +16,13 @@ func main() {
 	app.Use(NewLoggerMiddleware())
 	app.Use(NewStaticMiddleware(http.Dir("static")))
 
-	app.Get("/", func(c context.Context, w http.ResponseWriter, r *http.Request) context.Context {
+	app.Get("/", func(c context.Context, w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, "gogo server\n")
-		return nil
 	})
 
-	app.Get("/hello/:name", func(c context.Context, w http.ResponseWriter, r *http.Request) context.Context {
-		name := gogo.Param(c, "name")
+	app.Get("/hello/:name", func(c context.Context, w http.ResponseWriter, r *http.Request) {
+		name, _ := gogo.Param(c, "name")
 		fmt.Fprintf(w, "Hello, %s!\n", name)
-		return nil
 	})
 
 	app.Run(":8080")
