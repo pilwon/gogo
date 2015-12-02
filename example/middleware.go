@@ -5,6 +5,7 @@ import (
 	"os"
 
 	interposeMiddleware "github.com/carbocation/interpose/middleware"
+	"github.com/goincremental/negroni-sessions"
 	gorillaHandlers "github.com/gorilla/handlers"
 	"github.com/phyber/negroni-gzip/gzip"
 	"github.com/pilwon/gogo"
@@ -38,4 +39,8 @@ func NewGorillaLogger() middleware.Handler {
 
 func NewGzipMiddleware(compressionLevel int) middleware.Handler {
 	return negroni.Middleware(gzip.Gzip(compressionLevel))
+}
+
+func NewSessions(name string, store sessions.Store) middleware.Handler {
+	return negroni.Middleware(sessions.Sessions(name, store))
 }

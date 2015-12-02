@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/goincremental/negroni-sessions/cookiestore"
 	"github.com/pilwon/gogo"
 	_ "github.com/pilwon/gogo/router/httprouter"
 	"golang.org/x/net/context"
@@ -18,6 +19,7 @@ func main() {
 	app.Use(NewGorillaLogger())
 	// app.Use(NewBasicAuth("foo", "bar"))
 	app.Use(NewGzipMiddleware(gzip.DefaultCompression))
+	app.Use(NewSessions("gogosession", cookiestore.New([]byte("secret123"))))
 	app.Use(NewStaticMiddleware(http.Dir("static")))
 
 	app.Get("/", func(c context.Context, w http.ResponseWriter, r *http.Request) {
