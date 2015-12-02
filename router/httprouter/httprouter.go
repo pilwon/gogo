@@ -25,15 +25,14 @@ func New() *Router {
 	}
 }
 
-func (r *Router) AddRoute(c context.Context, httpVerb string, path string, h middleware.Handler) error {
-	var err error
+func (r *Router) AddRoute(c context.Context, httpVerb string, path string, h middleware.Handler) (err error) {
 	defer func() {
 		if r := recover(); r != nil {
 			err = errors.New("Failed to add route")
 		}
 	}()
 	r.router.Handle(httpVerb, path, wrapHandler(c, h))
-	return err
+	return
 }
 
 func (r *Router) Handler() http.Handler {
