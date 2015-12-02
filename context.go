@@ -1,10 +1,14 @@
 package gogo
 
-import "golang.org/x/net/context"
+import (
+	"net/http"
+
+	"golang.org/x/net/context"
+)
 
 type (
 	key                    int
-	nextMiddlewareCallback func(context.Context) context.Context
+	nextMiddlewareCallback func(c context.Context, w http.ResponseWriter, r *http.Request) context.Context
 )
 
 const (

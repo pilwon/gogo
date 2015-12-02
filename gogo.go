@@ -33,9 +33,9 @@ func NewWithContextConfig(c context.Context, config Config) *Server {
 	return newServer(c, config)
 }
 
-func Next(c context.Context) context.Context {
+func Next(c context.Context, w http.ResponseWriter, r *http.Request) context.Context {
 	if next := nextMiddlewareFromContext(c); next != nil {
-		return next(c)
+		return next(c, w, r)
 	}
 	return c
 }

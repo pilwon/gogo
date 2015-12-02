@@ -7,6 +7,7 @@
 package main
 
 import (
+	"compress/gzip"
 	"fmt"
 	"net/http"
 
@@ -19,7 +20,8 @@ func main() {
 	app := gogo.New()
 
 	app.Use(NewRecoveryMiddleware())
-	app.Use(NewLoggerMiddleware())
+	app.Use(NewGorillaLogger())
+	app.Use(NewGzipMiddleware(gzip.DefaultCompression))
 	app.Use(NewStaticMiddleware(http.Dir("static")))
 
 	app.Get("/", func(c context.Context, w http.ResponseWriter, r *http.Request) {
@@ -36,8 +38,16 @@ func main() {
 ```
 
 
+## Middlewares
+
+### Supported Adapters
+
+* [interpose](https://github.com/carbocation/interpose)
+* [negroni](https://github.com/codegangsta/negroni)
+
+
 ## Credits
 
-* https://github.com/codegangsta/negroni
-* https://github.com/guregu/kami
-* https://github.com/strongloop/express
+* [negroni](https://github.com/codegangsta/negroni)
+* [kami](https://github.com/guregu/kami)
+* [express](https://github.com/strongloop/express)

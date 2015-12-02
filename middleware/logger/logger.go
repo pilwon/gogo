@@ -25,7 +25,7 @@ func (l *Logger) ServeHTTP(c context.Context, w http.ResponseWriter, r *http.Req
 	start := time.Now()
 	l.Printf("Started %s %s", r.Method, r.URL.Path)
 
-	gogo.Next(c)
+	gogo.Next(c, w, r)
 
 	res := w.(gogo.ResponseWriter)
 	l.Printf("Completed %v %s in %v", res.Status(), http.StatusText(res.Status()), time.Since(start))

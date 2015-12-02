@@ -1,6 +1,7 @@
 package main
 
 import (
+	"compress/gzip"
 	"fmt"
 	"net/http"
 
@@ -13,7 +14,10 @@ func main() {
 	app := gogo.New()
 
 	app.Use(NewRecoveryMiddleware())
-	app.Use(NewLoggerMiddleware())
+	// app.Use(NewLoggerMiddleware())
+	app.Use(NewGorillaLogger())
+	// app.Use(NewBasicAuth("foo", "bar"))
+	app.Use(NewGzipMiddleware(gzip.DefaultCompression))
 	app.Use(NewStaticMiddleware(http.Dir("static")))
 
 	app.Get("/", func(c context.Context, w http.ResponseWriter, r *http.Request) {

@@ -18,7 +18,7 @@ type middlewareNode struct {
 
 func (m middlewareNode) ServeHTTP(c context.Context, w http.ResponseWriter, r *http.Request) context.Context {
 	nextCalled := false
-	ctx := nextMiddlewareWithContext(c, func(c context.Context) context.Context {
+	ctx := nextMiddlewareWithContext(c, func(c context.Context, w http.ResponseWriter, r *http.Request) context.Context {
 		if !nextCalled && m.next != nil {
 			return m.next.ServeHTTP(c, w, r)
 		}

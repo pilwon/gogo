@@ -44,6 +44,6 @@ func (rec *Recovery) ServeHTTP(c context.Context, w http.ResponseWriter, r *http
 			}
 		}
 	}()
-	gogo.Next(c)
+	gogo.Next(c, w, r)
 	return nil
 }
