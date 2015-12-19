@@ -68,6 +68,6 @@ func MiddlewareFromRouteHandler(h router.Handler) middleware.Handler {
 	return router.MiddlewareFromRouterHandler(h)
 }
 
-func Wrap(h http.Handler) router.Handler {
-	return router.WrapHandler(h)
+func Wrap(h http.Handler) router.HandlerFunc {
+	return router.WrapHandler(h).(router.HandlerFunc)
 }
