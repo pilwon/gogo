@@ -50,4 +50,5 @@ func main() {
 
 * [negroni](https://github.com/codegangsta/negroni)
 * [kami](https://github.com/guregu/kami)
+* [macaron](https://github.com/go-macaron/macaron)
 * [express](https://github.com/strongloop/express)
