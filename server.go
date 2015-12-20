@@ -99,12 +99,18 @@ func (s *Server) Delete(path string, h router.HandlerFunc) {
 	registeredRouter.AddRoute(s.Context, "DELETE", path, router.MiddlewareFromRouterHandler(h))
 }
 
-func (s *Server) Run(addr string) {
+func (s *Server) Run(addr string) error {
+	if addr == "" {
+		return fmt.Errorf("Missing addr")
+	}
+
 	s.UseHandler(registeredRouter.Handler())
 
 	l := log.New(os.Stdout, "[gogo] ", 0)
 	l.Printf("Listening on %s", addr)
 	l.Fatal(http.ListenAndServe(addr, s))
+
+	return nil
 }
 
 func build(handlers []middleware.Handler) middlewareNode {
