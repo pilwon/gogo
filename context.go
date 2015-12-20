@@ -19,6 +19,7 @@ func nextMiddlewareWithContext(c context.Context, cb nextMiddlewareCallback) con
 	return context.WithValue(c, nextMiddlewareKey, cb)
 }
 
-func nextMiddlewareFromContext(c context.Context) nextMiddlewareCallback {
-	return c.Value(nextMiddlewareKey).(nextMiddlewareCallback)
+func nextMiddlewareFromContext(c context.Context) (nextMiddlewareCallback, bool) {
+	result, ok := c.Value(nextMiddlewareKey).(nextMiddlewareCallback)
+	return result, ok
 }
