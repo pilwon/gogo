@@ -23,7 +23,7 @@ type Recovery struct {
 func New() *Recovery {
 	return &Recovery{
 		Logger:     log.New(os.Stdout, "[gogo] ", 0),
-		PrintStack: true,
+		PrintStack: false,
 		StackAll:   false,
 		StackSize:  1024 * 8,
 	}
@@ -41,6 +41,8 @@ func (rec *Recovery) ServeHTTP(c context.Context, w http.ResponseWriter, r *http
 
 			if rec.PrintStack {
 				fmt.Fprintf(w, f, err, stack)
+			} else {
+				fmt.Fprintf(w, "Internal Server Error")
 			}
 		}
 	}()
