@@ -104,7 +104,11 @@ func (s *Server) Run(addr string) error {
 		return fmt.Errorf("Missing addr")
 	}
 
-	s.UseHandler(registeredRouter.Handler())
+	handler, err := registeredRouter.Handler()
+	if err != nil {
+		return err
+	}
+	s.UseHandler(handler)
 
 	l := log.New(os.Stdout, "[gogo] ", 0)
 	l.Printf("Listening on %s", addr)

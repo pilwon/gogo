@@ -9,7 +9,7 @@ import (
 
 type Router interface {
 	AddRoute(c context.Context, httpVerb string, path string, h middleware.Handler) error
-	Handler() http.Handler
+	Handler() (http.Handler, error)
 }
 
 type Handler interface {

@@ -35,8 +35,6 @@ func (r *Router) AddRoute(c context.Context, httpVerb string, path string, h mid
 	return
 }
 
-func (r *Router) Handler() http.Handler {
-	return r.router
 }
 
 func wrapHandler(c context.Context, h middleware.Handler) httprouter.Handle {
@@ -48,4 +46,6 @@ func wrapHandler(c context.Context, h middleware.Handler) httprouter.Handle {
 		c = gogocontext.ParamsWithContext(c, params)
 		h.ServeHTTP(c, w, r)
 	})
+func (r *Router) Handler() (http.Handler, error) {
+	return r.router, nil
 }
