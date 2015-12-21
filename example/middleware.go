@@ -30,7 +30,7 @@ func NewBasicAuth(username string, password string) middleware.Handler {
 
 func NewGorillaLogger() middleware.Handler {
 	return middleware.HandlerFunc(func(c context.Context, w http.ResponseWriter, r *http.Request) context.Context {
-		gorillaHandlers.CombinedLoggingHandler(os.Stdout, http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		gorillaHandlers.LoggingHandler(os.Stdout, http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			gogo.Next(c, w, r)
 		})).ServeHTTP(w, r)
 		return nil
