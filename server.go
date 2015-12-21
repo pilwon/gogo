@@ -74,29 +74,50 @@ func (s *Server) UseHandlerFunc(h http.HandlerFunc) {
 func (s *Server) Get(path string, h router.HandlerFunc) {
 	registeredRouter.AddRoute(s.Context, "GET", path, router.MiddlewareFromRouterHandler(h))
 }
+func (s *Server) GetAll(h router.HandlerFunc) {
+	registeredRouter.AddRouteAll(s.Context, "GET", router.MiddlewareFromRouterHandler(h))
+}
 
 func (s *Server) Head(path string, h router.HandlerFunc) {
 	registeredRouter.AddRoute(s.Context, "HEAD", path, router.MiddlewareFromRouterHandler(h))
+}
+func (s *Server) HeadAll(h router.HandlerFunc) {
+	registeredRouter.AddRouteAll(s.Context, "HEAD", router.MiddlewareFromRouterHandler(h))
 }
 
 func (s *Server) Options(path string, h router.HandlerFunc) {
 	registeredRouter.AddRoute(s.Context, "OPTIONS", path, router.MiddlewareFromRouterHandler(h))
 }
+func (s *Server) OptionsAll(h router.HandlerFunc) {
+	registeredRouter.AddRouteAll(s.Context, "OPTIONS", router.MiddlewareFromRouterHandler(h))
+}
 
 func (s *Server) Post(path string, h router.HandlerFunc) {
 	registeredRouter.AddRoute(s.Context, "POST", path, router.MiddlewareFromRouterHandler(h))
+}
+func (s *Server) PostAll(h router.HandlerFunc) {
+	registeredRouter.AddRouteAll(s.Context, "POST", router.MiddlewareFromRouterHandler(h))
 }
 
 func (s *Server) Put(path string, h router.HandlerFunc) {
 	registeredRouter.AddRoute(s.Context, "PUT", path, router.MiddlewareFromRouterHandler(h))
 }
+func (s *Server) PutAll(h router.HandlerFunc) {
+	registeredRouter.AddRouteAll(s.Context, "PUT", router.MiddlewareFromRouterHandler(h))
+}
 
 func (s *Server) Patch(path string, h router.HandlerFunc) {
 	registeredRouter.AddRoute(s.Context, "PATCH", path, router.MiddlewareFromRouterHandler(h))
 }
+func (s *Server) PatchAll(h router.HandlerFunc) {
+	registeredRouter.AddRouteAll(s.Context, "PATCH", router.MiddlewareFromRouterHandler(h))
+}
 
 func (s *Server) Delete(path string, h router.HandlerFunc) {
 	registeredRouter.AddRoute(s.Context, "DELETE", path, router.MiddlewareFromRouterHandler(h))
+}
+func (s *Server) DeleteAll(h router.HandlerFunc) {
+	registeredRouter.AddRouteAll(s.Context, "DELETE", router.MiddlewareFromRouterHandler(h))
 }
 
 func (s *Server) Run(addr string) error {

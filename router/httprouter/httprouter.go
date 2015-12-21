@@ -46,6 +46,10 @@ func (r *Router) AddRoute(c context.Context, httpVerb string, path string, h mid
 	return
 }
 
+func (r *Router) AddRouteAll(c context.Context, httpVerb string, h middleware.Handler) (err error) {
+	return r.AddRoute(c, httpVerb, "/*all", h)
+}
+
 func (r *Router) Handler() (http.Handler, error) {
 	return r.router, nil
 }
