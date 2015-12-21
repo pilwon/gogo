@@ -7,7 +7,8 @@ import (
 
 	"github.com/goincremental/negroni-sessions/cookiestore"
 	"github.com/pilwon/gogo"
-	_ "github.com/pilwon/gogo/router/httprouter"
+	_ "github.com/pilwon/gogo/router/denco"
+	// _ "github.com/pilwon/gogo/router/httprouter"
 	"golang.org/x/net/context"
 )
 
