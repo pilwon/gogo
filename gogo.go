@@ -47,13 +47,12 @@ func Params(c context.Context) gogocontext.Params {
 	return gogocontext.ParamsFromContext(c)
 }
 
-func Param(c context.Context, key string) (string, error) {
+func Param(c context.Context, key string) string {
 	val, ok := gogocontext.ParamsFromContext(c)[key]
-	if ok {
-		return val, nil
-	} else {
-		return val, errors.New(fmt.Sprintf("Invalid param: %s", key))
+	if !ok {
+		return ""
 	}
+	return val
 }
 
 func RegisterRouter(r router.Router) {
