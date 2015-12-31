@@ -1,8 +1,6 @@
 package gogo
 
 import (
-	"errors"
-	"fmt"
 	"net/http"
 
 	"github.com/pilwon/gogo/gogocontext"
