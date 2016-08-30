@@ -2,6 +2,7 @@ package main
 
 import (
 	"compress/gzip"
+	"context"
 	"fmt"
 	"net/http"
 
@@ -9,7 +10,6 @@ import (
 	"github.com/pilwon/gogo"
 	_ "github.com/pilwon/gogo/router/denco"
 	// _ "github.com/pilwon/gogo/router/httprouter"
-	"golang.org/x/net/context"
 )
 
 func main() {
@@ -28,7 +28,7 @@ func main() {
 	})
 
 	app.Get("/hello/:name", func(c context.Context, w http.ResponseWriter, r *http.Request) {
-		name, _ := gogo.Param(c, "name")
+		name := gogo.Param(c, "name")
 		fmt.Fprintf(w, "Hello, %s!\n", name)
 	})
 

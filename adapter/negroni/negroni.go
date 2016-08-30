@@ -1,11 +1,11 @@
 package negroni
 
 import (
+	"context"
 	"net/http"
 
 	"github.com/pilwon/gogo"
 	"github.com/pilwon/gogo/middleware"
-	"golang.org/x/net/context"
 )
 
 type Handler interface {

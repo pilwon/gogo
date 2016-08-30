@@ -8,12 +8,12 @@ package main
 
 import (
 	"compress/gzip"
+	"context"
 	"fmt"
 	"net/http"
 
 	"github.com/pilwon/gogo"
 	_ "github.com/pilwon/gogo/router/httprouter"
-	"golang.org/x/net/context"
 )
 
 func main() {

@@ -1,11 +1,11 @@
 package gzip
 
 import (
+	"context"
 	"net/http"
 
 	negroniGzip "github.com/phyber/negroni-gzip/gzip"
 	"github.com/pilwon/gogo/adapter/negroni"
-	"golang.org/x/net/context"
 )
 
 // Gzip is a middleware handler that writes gzip-compressed reponsse

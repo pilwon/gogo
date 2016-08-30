@@ -1,11 +1,10 @@
 package static
 
 import (
+	"context"
 	"net/http"
 	"path"
 	"strings"
-
-	"golang.org/x/net/context"
 )
 
 // NoDirListing is a middleware disabling directory listing of http.FileServer

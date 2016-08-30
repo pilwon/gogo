@@ -1,10 +1,10 @@
 package router
 
 import (
+	"context"
 	"net/http"
 
 	"github.com/pilwon/gogo/middleware"
-	"golang.org/x/net/context"
 )
 
 type Router interface {

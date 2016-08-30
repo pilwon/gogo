@@ -1,6 +1,7 @@
 package denco
 
 import (
+	"context"
 	"errors"
 	"net/http"
 
@@ -8,7 +9,6 @@ import (
 	"github.com/pilwon/gogo"
 	"github.com/pilwon/gogo/gogocontext"
 	"github.com/pilwon/gogo/middleware"
-	"golang.org/x/net/context"
 )
 
 func init() {

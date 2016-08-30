@@ -1,13 +1,13 @@
 package logger
 
 import (
+	"context"
 	"log"
 	"net/http"
 	"os"
 	"time"
 
 	"github.com/pilwon/gogo"
-	"golang.org/x/net/context"
 )
 
 // Logger is a middleware handler that logs the request as it goes in and the response as it goes out.

@@ -1,12 +1,12 @@
 package gorillalogger
 
 import (
+	"context"
 	"net/http"
 	"os"
 
 	gorillaHandlers "github.com/gorilla/handlers"
 	"github.com/pilwon/gogo"
-	"golang.org/x/net/context"
 )
 
 // GorillaLogger is a middleware handler that logs using Gorilla logger

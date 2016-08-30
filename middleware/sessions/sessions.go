@@ -1,11 +1,11 @@
 package sessions
 
 import (
+	"context"
 	"net/http"
 
 	gorillaSessions "github.com/gorilla/sessions"
 	"github.com/pilwon/gogo/middleware"
-	"golang.org/x/net/context"
 )
 
 type key int

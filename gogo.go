@@ -1,12 +1,12 @@
 package gogo
 
 import (
+	"context"
 	"net/http"
 
 	"github.com/pilwon/gogo/gogocontext"
 	"github.com/pilwon/gogo/middleware"
 	"github.com/pilwon/gogo/router"
-	"golang.org/x/net/context"
 )
 
 type Config map[string]interface{}

@@ -1,11 +1,11 @@
 package interpose
 
 import (
+	"context"
 	"net/http"
 
 	"github.com/pilwon/gogo"
 	"github.com/pilwon/gogo/middleware"
-	"golang.org/x/net/context"
 )
 
 func Middleware(h func(http.Handler) http.Handler) middleware.Handler {

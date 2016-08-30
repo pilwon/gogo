@@ -1,6 +1,7 @@
 package recovery
 
 import (
+	"context"
 	"fmt"
 	"log"
 	"net/http"
@@ -8,7 +9,6 @@ import (
 	"runtime"
 
 	"github.com/pilwon/gogo"
-	"golang.org/x/net/context"
 )
 
 // Recovery is a middleware that recovers from any panics and writes a 500 if there was one.

@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"net/http"
 	"os"
 
@@ -15,7 +16,6 @@ import (
 	"github.com/pilwon/gogo/middleware/logger"
 	"github.com/pilwon/gogo/middleware/recovery"
 	"github.com/pilwon/gogo/middleware/static"
-	"golang.org/x/net/context"
 )
 
 var (

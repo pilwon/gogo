@@ -1,6 +1,7 @@
 package gogo
 
 import (
+	"context"
 	"fmt"
 	"log"
 	"net/http"
@@ -8,7 +9,6 @@ import (
 
 	"github.com/pilwon/gogo/middleware"
 	"github.com/pilwon/gogo/router"
-	"golang.org/x/net/context"
 )
 
 type middlewareNode struct {
